@@ -14,8 +14,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+// include AD9851 library, from https://github.com/handiko/AD9851
 #include <AD9851.h>
 
+/*  define the I/O ports that being used
+ *  
+ *  | DDS pins | ESP12 pins|
+ *  |----------|-----------|
+ *  | RST      |  GPIO-13  |
+ *  | DATA     |  GPIO-12  |
+ *  | FQ       |  GPIO-14  |
+ *  | CLK      |  GPIO-16  |
+ *  
+ */
 #define RST   13
 #define DATA  12
 #define FQ    14
@@ -23,6 +35,8 @@
 
 DDS dds;
 
+// min_freq : the frequency which the Jammer starts transmitting on
+// max_freq : the frequency which the Jammer stops transmitting on
 unsigned long min_freq = 34800000UL;
 unsigned long max_freq = 35200000UL;
 
@@ -37,6 +51,7 @@ void setup()
   
   Serial.println("Test - Started ! \n");
 
+  // initialize the DDS
   dds = dds_init(RST, DATA, FQ, CLK);
   dds_reset(dds);
   writeFreq(dds, min_freq);
@@ -44,5 +59,7 @@ void setup()
 
 void loop()
 {
+  // create random hopping RF Jammer, by which the frequency
+  // is bounded by the min_freq and max_freq values
   writeFreq(dds, random(min_freq, max_freq));
 }
