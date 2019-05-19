@@ -4,7 +4,8 @@ The parameters which we can control:
 * RF Jamming action (enable/disable)
 * Starting Frequency (minimum freq.)
 * Stop Frequency (maximum freq.)
-and the device then reports back these parameters.
+
+And then the device then reports back these parameters.
 
 Tested on Wemos D1 mini and cheap AD9851 DDS module with **30MHz external clock**.
 Compiled using Arduino IDE 1.8.9.
