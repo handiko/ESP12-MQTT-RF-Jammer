@@ -14,14 +14,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+// include ESP8266 related libraries
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WiFiMulti.h>
 
+// include MQTT protocol library. https://github.com/knolleary/pubsubclient
 #include <PubSubClient.h>
 
+// include AD9851 library, from https://github.com/handiko/AD9851
 #include <AD9851.h>
 
+/*  define the I/O ports that being used
+ *  
+ *  | DDS pins | ESP12 pins|
+ *  |----------|-----------|
+ *  | RST      |  GPIO-13  |
+ *  | DATA     |  GPIO-12  |
+ *  | FQ       |  GPIO-14  |
+ *  | CLK      |  GPIO-16  |
+ *  
+ */
 #define RST   13
 #define DATA  12
 #define FQ    14
@@ -48,19 +62,23 @@ const char* inTopicMinFreq  = "/my_broker_username/in/minFreq";
 long currentTime, lastTime;
 bool enDDS = false;
 
+// min_freq : the frequency which the Jammer starts transmitting on
+// max_freq : the frequency which the Jammer stops transmitting on
 unsigned long min_freq = 34800000UL;
 unsigned long max_freq = 35200000UL;
 
 void setupWiFi()
 {
   delay(100);
-  
+
+  // connect to WiFi(s) using credentials
   wifiMulti.addAP("ssid_from_AP_1", "your_password_for_AP_1");
   wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
   wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
 
   Serial.println("Connecting ...");
 
+  // during connecting phase, we turn-on the LED
   digitalWrite(LED_BUILTIN, LOW);
 
   while (wifiMulti.run() != WL_CONNECTED) 
@@ -69,8 +87,10 @@ void setupWiFi()
     Serial.print('.');
   }
 
+  // once sucessfully connected to WiFi, we turn-off the LED
   digitalWrite(LED_BUILTIN, HIGH);
-  
+
+  // print the WiFi info
   Serial.println('\n');
   Serial.print("Connected to:\t");
   Serial.println(WiFi.SSID());
@@ -79,6 +99,9 @@ void setupWiFi()
   Serial.println(WiFi.localIP());
 }
 
+/*
+ * This function is used to reconnect to the MQTT server
+ */
 void reconnect()
 {
   while(!client.connected())
@@ -90,7 +113,14 @@ void reconnect()
     {
       Serial.print("\nConnected to ");
       Serial.println(broker);
-      
+
+      /* 
+       * we subscribes into three "inTopic"(s) at once 
+       * 
+       * inTopicEnable  : Enable/disable the RF Jamming routine
+       * inTopicMaxFreq : Sets the max_freq value
+       * inTopicMinFreq : Sets the min_freq value
+       */
       client.subscribe(inTopicEnable);
       client.subscribe(inTopicMaxFreq);
       client.subscribe(inTopicMinFreq);
@@ -105,10 +135,15 @@ void reconnect()
   }
 }
 
+/*
+ * This function is where the desired actions executed upon the incoming
+ * messages from the subscribed topics.
+ */
 void callback(char* topic, byte* payload, unsigned int len)
 {
   char buff[50] = {};
-  
+
+  // print some incoming messages
   Serial.print("Received messages: ");
   Serial.println(topic);
   
@@ -121,6 +156,10 @@ void callback(char* topic, byte* payload, unsigned int len)
 
   String str((char*)buff);
 
+  /* 
+   *  if the incoming topic is "/in/en", then enable
+   *  or disable the jammer refering to the payload
+   */
   if(strcmp(topic, inTopicEnable) == 0)
   {
     if(len == 1 && payload[0] == '1')
@@ -134,11 +173,19 @@ void callback(char* topic, byte* payload, unsigned int len)
     }
   }
 
+  /* 
+   *  if the incoming topic is "/in/maxFreq",
+   *  then put the incoming value into max_freq
+   */
   else if(strcmp(topic, inTopicMaxFreq) == 0)
   {
     max_freq = strtoul(str.c_str(), NULL, 0);
   }
 
+  /* 
+   *  if the incoming topic is "/in/minFreq",
+   *  then put the incoming value into min_freq
+   */
   else if(strcmp(topic, inTopicMinFreq) == 0)
   {
     min_freq = strtoul(str.c_str(), NULL, 0);
@@ -173,7 +220,8 @@ void loop()
   char messageEn[50];
   char messageMaxFreq[50];
   char messageMinFreq[50];
-  
+
+  // if we lose connection to the server, try to reconnect
   if(!client.connected())
   {
     reconnect();
@@ -181,9 +229,12 @@ void loop()
 
   client.loop();
 
+  // enable/disable the RF Jammer
   if(enDDS)
   {
     digitalWrite(LED_BUILTIN, LOW);
+
+    // this is where the RF Jamming action is done
     writeFreq(dds, random(min_freq, max_freq)); 
   }
   
@@ -194,7 +245,14 @@ void loop()
   }
 
   currentTime = millis();
-  
+
+  /*
+   * every 1.5 seconds we reports :
+   * 
+   *  - RF Jamming status : (enable/disable)
+   *  - max_freq value    : (if RF Jamming status is enabled)
+   *  - min_freq value    : (if RF Jamming status is enabled)
+   */
   if(currentTime - lastTime > 1500)
   {
     if(enDDS)
@@ -214,6 +272,7 @@ void loop()
     
     client.publish(outTopicStatus, messageEn);
 
+    // print some infos to the seriam monitor
     if(enDDS)
     {
       Serial.print("Sending messages:\t");
