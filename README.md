@@ -16,6 +16,18 @@ There are a few dependencies required:
 * [PubSubClient](https://github.com/knolleary/pubsubclient) library. Personally, I am using [this](https://github.com/knolleary/pubsubclient) library.
 * My [AD9851 DDS](https://github.com/handiko/AD9851) library. Please follow the installation [instruction](https://github.com/handiko/AD9851#instalation).
 
+## ESP12 to AD9851 DDS Module Connections
+| ESP12   | AD9851 Module |
+|:-------:|:-------------:|
+| GPIO-13 | RST           |
+| GPIO-12 | DATA          |
+| GPIO-14 | FQ            |
+| GPIO-16 | CLK           |
+
+**Very important:**
+* AD9851 DDS Module must be using **30MHz external oscillator**.
+* **Don't forget** to pull up the DDS D0 and D1 pins to 5V thru a 10k resistor and ground the DDS D2 pin. Otherwise, the serial programming wouldn't work (please refer to the datasheet, page 15, figure 18).
+
 ## Usage
 
 ## In Action
