@@ -51,7 +51,12 @@ you can whether use only one SSID and password or all of them.
 * For monitoring the signal, I'm using [RTL-SDR](https://github.com/osmocom/rtl-sdr) dongle and [GQRX](https://github.com/csete/gqrx) SDR Software (rudimentary RF Spectrum display).
 * My initial `min_freq` and `max_freq` are 34.8 MHz and 35.2 MHz, therefore I tuned my RTL-SDR to 35 MHz of center frequency.
 * After the ESP12 connected to the local WiFi, it will starts to transmit a bunch of RF signals which you can monitor.
+
+*Picture above: Initial test with the ESP12_RF_Jammer_Test.ino skecth. It will transmitting RF between 34.8MHz and 35.2MHz according to the default min_freq and max_freq values*
+
 * For controlling the RF Jammer, I'm using MQTT Dashboard smartphone app with proper settings. If I were to change the frequencies or disable/re-enable the jammer, the device would response accordingly.
+![](./inAction.png)
+*Picture above: Demonstration for controlling the RF Jammer via MQTT protocol (ESP12_MQTT_RF_Jammer.ino skecth). First, i started off with min_freq of 40.7MHz and max_freq of 41.2MHz. Then, sometime later I changed the max_freq and then the min_freq into 41.35MHz and 40.55MHz respectively. For a couple of seconds, I disabled the RF Jammer and then re-enabled it*
 
 ## TODO
 * Optimize the code (there is a lot of room for improvements!!)
