@@ -17,13 +17,6 @@ There are a few dependencies required:
 * My [AD9851 DDS](https://github.com/handiko/AD9851) library. Please follow the installation [instruction](https://github.com/handiko/AD9851#instalation).
 
 ## ESP12 to AD9851 DDS Module Connections
-| ESP12   | AD9851 Module |
-|:-------:|:-------------:|
-| GPIO-13 | RST           |
-| GPIO-12 | DATA          |
-| GPIO-14 | FQ            |
-| GPIO-16 | CLK           |
-
 ![](./table1.png)
 
 **Very important:**
