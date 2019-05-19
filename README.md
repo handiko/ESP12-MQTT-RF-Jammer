@@ -24,6 +24,8 @@ There are a few dependencies required:
 | GPIO-14 | FQ            |
 | GPIO-16 | CLK           |
 
+![](./table1.png)
+
 **Very important:**
 * AD9851 DDS Module must be using **30MHz external oscillator**.
 * **Don't forget** to pull up the DDS D0 and D1 pins to 5V thru a 10k resistor and ground the DDS D2 pin. Otherwise, the serial programming wouldn't work (please refer to the datasheet, page 15, figure 18).
