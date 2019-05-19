@@ -27,6 +27,25 @@ There are a few dependencies required:
 ![](./photo1.jpg)
 
 ## Usage
+* Please use your own **username, password, and mqtt broker service**, then put into:
+```cpp
+const char* brokerUser = "my_broker_username";
+const char* brokerPass = "my_broker_password";
+const char* broker = "my_broker_server";
+```
+personally, i am using `mqtt.dioty.co` for the broker server, therefore my username would be `myemail@email.com`. You can use another mqtt broker server.
+
+* Put your **WiFi credentials** into:
+```cpp
+wifiMulti.addAP("ssid_from_AP_1", "your_password_for_AP_1");
+wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
+wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
+```
+you can whether use only one SSID and password or all of them.
+
+* You can use the initial default `min_freq` and `max_freq` as is, or use another frequency accordingly. Please note that absolute maximum fundamental frequency which AD9851 can generate properly is < 90 MHz (30 MHz external osc. with 6x multiplier).
+* RF Jammer status, `min_freq`, and `max_freq` is reported into the `/out/stat`, `/out/minFreq`, and `/out/maxFreq` topic respectively.
+* RF Jammer enabling/disabling commands, and new values for the `min_freq` and `max_freq` are received from the `/in/en`, `/in/minFreq`, and `/in/maxFreq` topic respectively.
 
 ## In Action
 
