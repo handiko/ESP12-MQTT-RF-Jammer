@@ -272,7 +272,7 @@ void loop()
     
     client.publish(outTopicStatus, messageEn);
 
-    // print some infos to the seriam monitor
+    // print some infos to the serial monitor
     if(enDDS)
     {
       Serial.print("Sending messages:\t");
