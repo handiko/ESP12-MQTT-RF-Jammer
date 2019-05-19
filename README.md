@@ -22,7 +22,7 @@ There are a few dependencies required:
 **Very important:**
 * AD9851 DDS Module must be using **30MHz external oscillator**.
 * **Don't forget** to pull up the DDS D0 and D1 pins to 5V thru a 10k resistor and ground the DDS D2 pin. Otherwise, the serial programming wouldn't work (please refer to the datasheet, page 15, figure 18).
-* Tips: put some length of wire to the RF output pin of the AD9851 DDS module for which acts as an rudimentary antenna. It will boost the signal greatly.
+* Tips: put some length of wire to the RF output pin of the AD9851 DDS module for which acts as a rudimentary antenna. It will boost the signal greatly.
 
 ![](./photo1.jpg)
 
