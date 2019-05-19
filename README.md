@@ -11,6 +11,10 @@ Tested on Wemos D1 mini and cheap AD9851 DDS module with **30MHz external clock*
 Compiled using Arduino IDE 1.8.9.
 
 ## Dependencies
+There are a few dependencies required:
+* [ESP8266 Core for Arduino](https://github.com/esp8266/Arduino). Please follow the installation instruction.
+* [PubSubClient](https://github.com/knolleary/pubsubclient) library. Personally, I am using [this](https://github.com/knolleary/pubsubclient) library.
+* My [AD9851 DDS](https://github.com/handiko/AD9851) library. Please follow the installation [instruction](https://github.com/handiko/AD9851#instalation).
 
 ## Usage
 
