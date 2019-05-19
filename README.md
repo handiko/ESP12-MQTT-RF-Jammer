@@ -56,7 +56,7 @@ you can whether use only one SSID and password or all of them.
 
 * For controlling the RF Jammer, I'm using MQTT Dashboard smartphone app with proper settings. If I were to change the frequencies or disable/re-enable the jammer, the device would response accordingly.
 ![](./inAction.png)
-*Picture above: Demonstration for controlling the RF Jammer via MQTT protocol (ESP12_MQTT_RF_Jammer.ino skecth). First, i started off with min_freq of 40.7MHz and max_freq of 41.2MHz. Then, sometime later I changed the max_freq and then the min_freq into 41.35MHz and 40.55MHz respectively. For a couple of seconds, I disabled the RF Jammer and then re-enabled it*
+*Picture above: Demonstration for controlling the RF Jammer via MQTT protocol (ESP12_MQTT_RF_Jammer.ino skecth). First, i started off with min_freq of 40.7MHz and max_freq of 41.2MHz. Then, sometime later I changed the max_freq and then the min_freq into 41.35MHz and 40.55MHz respectively. For a couple of seconds, I disabled the RF Jammer and then re-enabled it. All is done via MQTT Dashboard app.*
 
 ## TODO
 * Optimize the code (there is a lot of room for improvements!!)
